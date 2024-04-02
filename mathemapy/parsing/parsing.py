@@ -1,4 +1,3 @@
-from dataclasses import dataclass, field
 from .tokens import *
 from mathemapy.nodes import *
 from tokenize import TokenInfo
@@ -13,7 +12,6 @@ TokenInfo:
     line
 """
 
-#@dataclass
 class Parser:
 
     """
@@ -93,10 +91,10 @@ class Parser:
             blocks.append({'node': node, 'visible': visible})
         
         if len(blocks) > 0:
-            return BlockNode({},blocks=blocks)
+            return BlockNode(blocks=blocks)
         else:
             if not node:
-                node = ConstantNode({},'undefined')
+                node = ConstantNode('undefined')
                 return node
             
     def parseAssignment(self):
@@ -118,7 +116,7 @@ class Parser:
                 name = node.name
                 self.advance()
                 value = self.parseAssignment()
-                return AssignmentNode({},SymbolNode({},name), value=value)
+                return AssignmentNode(SymbolNode(name), value=value)
             
         elif isinstance(node, AccessorNode):
             self.advance()
@@ -414,9 +412,9 @@ class Parser:
             name = self.current_token.string
             self.advance()
             if name.lower() in ['true', 'false', 'null', 'undefined', 'NaN', 'Infinity']:
-                node = ConstantNode({},name)
+                node = ConstantNode(name)
             else:
-                node = SymbolNode({},name)
+                node = SymbolNode(name)
             
             node = self.parseAccessors(node)
             return node
@@ -575,7 +573,7 @@ class Parser:
         if self.current_token.exact_type == NUMBER:
             number = self.current_token.string
             #self.advance()
-            return ConstantNode({},number)
+            return ConstantNode(number)
         return self.parseParentheses()
     
     def parseParentheses(self):
