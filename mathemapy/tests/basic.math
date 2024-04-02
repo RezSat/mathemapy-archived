@@ -1,0 +1,32 @@
+x + x - 2 * 4 - (6/7)
+f(x) := x^2 + 2x + 4
+Expand: (x+2)*(x+3) ;; one-liner built-in function
+Expand[
+    (x+2)*(x+3)*Multiply[
+        x,
+        5y
+    ]
+]
+
+[ 0 0 0 0 0 0 0] ;; no need for separation using commas, unless you need them like for a instance below
+[ 0, 0, 0, 0, x + 2, 3 + 5,] ;; now comma will use as an delimiter to create a list inside.
+
+x  := {
+    1: 'first key/value pair',
+    2: 'second key/value pair',
+    3: 'third key/value pair',
+}
+
+func(x) := {
+    if x==1 {
+        print('yes)
+    }
+    else
+        print('no)
+}
+
+Equation: 2x + 3 = 5
+for i in something {
+    i = i + 1
+    print (i)
+}
