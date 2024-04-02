@@ -1,2 +1,2 @@
 # mathemapy
-A python implementation of mathema language
+A python implementation of the extensive JavaScript math library mathjs
