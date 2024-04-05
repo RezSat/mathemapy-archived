@@ -228,7 +228,7 @@ class Tokenizer:
                     self.next()
                     # this is just the dot delimiter
                     if not self.c.isdigit():
-                        tokens.append(TokenInfo(DELIMITER, exact_type=DELIMITERS[c1],  string=c1, start=start, end=self.pos))                   
+                        tokens.append(TokenInfo(DELIMITER, exact_type=DELIMITERS[self.c],  string=self.c, start=start, end=self.pos))                   
                     else:
                         # for numbers like .2
                         while self.c.isdigit():
