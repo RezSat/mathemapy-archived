@@ -1,6 +1,5 @@
 from tokenize import tokenize
 from io import BytesIO
-from tokens import *
 import unicodedata
 
 def pytokenizer(source: str):
@@ -196,8 +195,12 @@ class Tokenizer:
             # check for number
             if (self.c.isdigit() or (self.c == '.')):
                 start = self.pos.copy()
+                if self.peek(1) != None:
+                    prefix = self.c + self.peek(1)
+                else:
+                    prefix = self.c
                 # checking for binary, octal, hex
-                if self.c+self.peek(1) in ['0b', '0o', '0x']:
+                if prefix in ['0b', '0o', '0x']:
                     self.next()
                     self.next()
                     while self.c.isalnum():
@@ -270,7 +273,7 @@ class Tokenizer:
                             tokens.append(TokenInfo(NUMBER, string=self.content[start.idx:self.pos.idx], start=start, end=self.pos))
                     
                     #Exponential notation like "2e+4"
-                    elif self.c in "Ee":
+                    elif self.c == "e" or self.c == 'E':
                         # yeah its the same thing as up there,
                         if self.c in "-+":
                             self.next()

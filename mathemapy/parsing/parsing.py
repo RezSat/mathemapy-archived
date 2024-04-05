@@ -1,6 +1,7 @@
-from .tokens import *
+#from .tokens import *
 from mathemapy.nodes import *
-from tokenize import TokenInfo
+from .lexer import *
+
 """
 TokenInfo:
     exact_type
@@ -9,7 +10,6 @@ TokenInfo:
     start
     end
     string
-    line
 """
 
 class Parser:
@@ -69,12 +69,12 @@ class Parser:
         node = None
         blocks = []
 
-        if (self.current_token.exact_type != NEWLINE and 
-            self.current_token.exact_type != ENDMARKER and 
+        if (self.current_token.string != '\n' and 
+            self.current_token.exact_type != EOF and 
             self.current_token.exact_type != SEMI):
             node = self.parseAssignment()
             #self.advance()
-        while (self.current_token.exact_type == NEWLINE 
+        while (self.current_token.string == '\n' 
                or self.current_token.exact_type == SEMI):
             if (len(blocks) == 0 and node):
                 visible = (self.current_token.exact_type != SEMI)
@@ -82,8 +82,8 @@ class Parser:
         
         self.advance()
 
-        if (self.current_token.exact_type != NEWLINE and 
-            self.current_token.exact_type != ENDMARKER and 
+        if (self.current_token.string != '\n' and 
+            self.current_token.exact_type != EOF and 
             self.current_token.exact_type != SEMI):
             node = self.parseAssignment()
 
@@ -408,10 +408,15 @@ class Parser:
     def parseSymbol(self):
 
         # things like `mod` , 'to', 'in', 'and' are also consider as symbol
-        if self.current_token.exact_type == NAME:
+        if self.current_token.type == SYMBOL or (
+            self.current_token.type == DELIMITER and
+            self.current_token.string in NAMED_DELIMITERS
+        ):
             name = self.current_token.string
             self.advance()
-            if name.lower() in ['true', 'false', 'null', 'undefined', 'NaN', 'Infinity']:
+            if name in CONSTANTS:
+                node = ConstantNode(CONSTANTS[name])
+            elif name in NUMBERIC_CONSTANTS:
                 node = ConstantNode(name)
             else:
                 node = SymbolNode(name)
@@ -479,12 +484,17 @@ class Parser:
         return node
     
     def parseString(self):
-        if self.current_token.exact_type == STRING:
-            node = ConstantNode(self.current_token.string)
+        if self.current_token.exact_type == DQUOTE or self.current_token.exact_type == SQUOTE:
+            string = self.parseStringToken()
+            node = ConstantNode(string)
             self.advance() # not sure if this is need so run it and see
             node = self.parseAccessors(node)
             return node
         return self.parseMatrix()
+    
+    def parseStringToken(self):
+        #need logic for parsing strings properly
+        pass
     
     def parseMatrix(self):
         params = []
@@ -549,7 +559,10 @@ class Parser:
 
             while self.current_token.exact_type == COMMA:
                 self.advance()
-                if self.current_token.exact_type in [STRING, NAME, NUMBER]:
+                if self.current_token.type == SYMBOL or (
+                    self.current_token.type == DELIMITER and
+                    self.current_token.string in NAMED_DELIMITERS
+                ):
                     key = self.current_token.string
                     self.advance()
 
@@ -560,8 +573,9 @@ class Parser:
                     # handle the error
                     pass
             if self.current_token.exact_type != RBRACE:
-                # handle the error
-                pass
+                # handle the error properly
+                print("No } found")
+                raise SyntaxError
             self.closeParams()
             self.advance()
             node =  ObjectNode(properties)
@@ -570,7 +584,7 @@ class Parser:
         return self.parseNumber()
     
     def parseNumber(self):
-        if self.current_token.exact_type == NUMBER:
+        if self.current_token.type == NUMBER:
             number = self.current_token.string
             #self.advance()
             return ConstantNode(number)
@@ -578,13 +592,13 @@ class Parser:
     
     def parseParentheses(self):
         print("hi")
-        if self.current_token.exact_type == LPAR:
+        if self.current_token.exact_type == LPAREN:
             self.openParams()
             self.advance()
 
             node = self.parseAssignment()
 
-            if self.current_token.exact_type != RPAR:
+            if self.current_token.exact_type != RPAREN:
                 # handle the error
                 pass
             self.closeParams()
@@ -596,5 +610,5 @@ class Parser:
     
     def parseEnd(self):
         print(self.current_token)
-        if self.current_token.exact_type == ENDMARKER:
+        if self.current_token.exact_type == EOF:
             raise None
