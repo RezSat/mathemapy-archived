@@ -337,6 +337,3 @@ def run_tests():
     contents = "2x+5-(9*7)-5/4 + 23e5"
     tokens = Tokenizer(fn=fn, encoding='utf-8', content=contents).tokenize()
     return tokens
-
-if __name__ == "__main__":
-    for i in run_tests(): print(i)
