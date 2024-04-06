@@ -17,3 +17,8 @@ class BlockNode(Node):
     """
     def __init__(self, blocks: list):
         self.blocks = blocks
+
+    def __repr__(self) -> str:
+        return str({
+            "blocks": self.blocks
+        })
