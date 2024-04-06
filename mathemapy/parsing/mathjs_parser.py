@@ -1747,3 +1747,5 @@ def create_error(state, message):
     error.char = c
 
     return error
+
+#print(parse_start('2x+5', {}))
