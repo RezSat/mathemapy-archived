@@ -102,6 +102,11 @@ NAMED_DELIMITERS = [
     'or',
     'not',
     'xor',
+    'if',
+    'else',
+    'elseif',
+    'for',
+    'while'
 ]
 
 #CONSTANTS

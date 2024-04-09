@@ -1,0 +1,86 @@
+Block ::= (Statement | Comment)*
+
+Statement ::= Assignment
+           | Expression
+           | Equation
+           | Inequality
+           | IfStatement
+           | ForLoop
+           | WhileLoop
+           | FunctionDefinition
+
+Assignment ::= VariableName ':=' Expression
+4
+Equation ::= VariableName '=' Expression
+            | Expression '=' VariableName
+            | Expression '=' Expression
+
+Inequality  ::= Expression ( '<' | '>' | '<=' | '>=' | '!=' ) Expression
+              | VariableName ( '<' | '>' | '<=' | '>=' | '!=' ) Expression
+              | Expression ( '<' | '>' | '<=' | '>=' | '!=') VariableName
+
+Expression ::= BinaryOperation
+             | UnaryOperation
+             | Accessor
+             | Parenthesis
+             | List
+             | Dictionary
+             | FunctionCall
+             | Symbol
+             | Number
+             | String
+
+BinaryOperation ::= Expression Operator Expression
+
+UnaryOperation ::= Operator Expression
+
+Operator ::= '+' | '-' | '*' | '/' | '^' | 'and' | 'or' | 'not' | 'xor' | '<' | '>' | '<=' | '>=' | '==' | '!='
+
+Accessor ::= VariableName '[' ( WholeNumber | String ) ']'
+
+Parenthesis ::= '(' Expression ')'
+
+List ::= '[' (Expression (',' Expression)*)? ']'
+
+Dictionary ::= '{' (Expression ':' Expression (',' Expression ':' Expression)*)? '}'
+
+FunctionCall ::= FunctionName '(' (Expression (',' Expression)*)? ')'
+
+FunctionDefinition ::= FunctionName '(' (VariableName (',' VariableName)*)? ')' ':=' Block
+
+IfStatement ::= 'if' Expression ':' Block ('elseif' Expression ':' Block)* ('else' Block)?
+
+ForLoop ::= 'for' VariableName 'in' Expression ':' Block
+
+WhileLoop ::= 'while' Expression ':' Block
+
+Symbol ::= Identifier
+
+Identifier ::= [a-zA-Z][a-zA-Z0-9_]*
+
+String ::= '"' [^"]* '"' | "'" [^']* "'"
+
+Number ::= WholeNumber 
+         | FloatingPointNumber
+         | ComplexNumber
+
+ExponentialNumber ::= ( WholeNumber 'e' ('+'|'-'|) WholeNumber )
+                    | ( FloatingPointNumber 'e' ('+'|'-'|) WholeNumber )
+                    | ( WholeNumber '.' WholeNumber 'e' ('+'|'-'|) WholeNumber )
+                    | ( FloatingPointNumber 'e' ('+'|'-'|) WholeNumber )
+
+WholeNumber ::=  [0-9]+
+
+FloatingPointNumber ::= ( WholeNumber ('.' [0-9]+) ) | '.'[0-9]+
+
+ComplexNumber ::= ( (WholeNumber | FloatingPointNumber) ( '+' | '-' ) (WholeNumber | FloatingPointNumber) 'i' )
+                | ( (WholeNumber | FloatingPointNumber) 'i' )
+                | ( '+' | '-' ) (WholeNumber | FloatingPointNumber) 'i'
+
+
+VariableName ::= Identifier
+
+FunctionName ::= [A-Z][a-zA-Z0-9_]*  // Builtin functions start with an uppercase letter
+
+Comment ::= '#' [^\n]* '\n'  // Single-line comments starting with '#'
+          | '//' [^\n]* '\n' // Single-line comments starting with '//'

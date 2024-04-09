@@ -13,7 +13,8 @@ math_expressions = [
 fn = "<stdin>"
 contents = "2+"
 tokens = Tokenizer(fn=fn, encoding='utf-8', content=math_expressions[0]).tokenize()
-for i in tokens:    print(i)
+for i in tokens:
+    print(f"['{i.start} {i.end}', '{i.type}', '{i.string}'],")
 ast = Parser(tokens)
 tree = ast.parse()
 print(tree)

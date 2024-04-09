@@ -1748,4 +1748,4 @@ def create_error(state, message):
 
     return error
 
-#print(parse_start('2x+5', {}))
+print(parse_start('4 = 2x+5', {}))
