@@ -591,7 +591,6 @@ class Parser:
         return self.parseParentheses()
     
     def parseParentheses(self):
-        print("hi")
         if self.current_token.exact_type == LPAREN:
             self.openParams()
             self.advance()

@@ -8,11 +8,13 @@ math_expressions = [
     #"∑(i=1 to n, i^2) - ∫(0, π, sin(x))", # not working abd don't care
     "e^(π*i) = -1",
     #"√(a^2 + b^2)" # not working and don't care
+    "2+",
+    "3+4i"
 ]
 
 fn = "<stdin>"
 contents = "2+"
-tokens = Tokenizer(fn=fn, encoding='utf-8', content=math_expressions[0]).tokenize()
+tokens = Tokenizer(fn=fn, encoding='utf-8', content=math_expressions[5]).tokenize()
 for i in tokens:
     print(f"['{i.start} {i.end}', '{i.type}', '{i.string}'],")
 ast = Parser(tokens)
