@@ -135,10 +135,11 @@ class Parser:
             return 0
                                               
 
-
 expr = "2+2"
 tokenizer = Tokenizer(expr)
 tokens = tokenizer.tokenize()
+
+
 parser = Parser(tokens)
 ast = parser.parse()
 print(ast)
